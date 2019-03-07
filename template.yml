@@ -1,0 +1,17 @@
+ - name: Play book for the template module
+   hosts: all
+   become: yes
+   tasks:
+
+    - name: Copying the template
+      template:
+       src: template.j2
+       dest: /etc/motd
+
+    - name: Storing the value in register
+      command: cat /etc/motd
+      register: mymotd
+
+    - name: reading the file
+      debug:
+       msg: "{{mymotd.stdout}}"

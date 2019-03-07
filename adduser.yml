@@ -1,0 +1,27 @@
+- name: Adding users using variables in playbook
+  hosts: ubuntu-grp
+  become: yes
+  tasks:
+   - name: Adding the groups
+     group:
+      name: "{{item}}"
+      state: present
+     loop:
+      - "{{dbagrp}}"
+      - "{{linuxgrp}}"
+      - "{{groupname}}"
+
+   - name: Adding the user
+     user:
+      name: "{{username}}"
+      comment: "{{actualname}}"
+      shell: /bin/bash
+      generate_ssh_key: yes
+      ssh_key_type: rsa
+      home: "{{homedir}}"
+      group: "{{groupname}}"
+      groups: "{{item}}"
+      append: yes
+     loop:
+      - "{{dbagrp}}"
+      - "{{linuxgrp}}“
